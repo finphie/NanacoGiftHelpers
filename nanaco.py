@@ -4,16 +4,28 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
 import time
 import argparse
+import os
+
+
+def file_path(path):
+    if os.path.isfile(path):
+        return path
+
+    raise argparse.ArgumentTypeError(f'{path} does not exist.')
+
+
+driver_path = 'chromedriver' + '.exe' if os.name == 'nt' else ''
 
 parser = argparse.ArgumentParser()
 
+parser.add_argument('-d', '--driver', default=driver_path, type=file_path, help='ChromeDriverのパス')
 parser.add_argument('number', type=int, help='nanaco番号')
 parser.add_argument('password', help='パスワード')
 parser.add_argument('gifts', nargs='+', help='ギフトID')
 
 args = parser.parse_args()
 
-with webdriver.Chrome('../chromedriver.exe') as driver:
+with webdriver.Chrome(args.driver) as driver:
 
     # 要素が見つかるまで10秒待機
     driver.implicitly_wait(10)

@@ -15,6 +15,9 @@ args = parser.parse_args()
 
 with webdriver.Chrome('../chromedriver.exe') as driver:
 
+    # 要素が見つかるまで10秒待機
+    driver.implicitly_wait(10)
+
     # nanacoログインページに移動
     driver.get('https://www.nanaco-net.jp/pc/emServlet')
 

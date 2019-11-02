@@ -12,7 +12,7 @@ NanacoGiftHelpersは、nanaco（モバイル・ネット会員）でのギフト
 
 1. 「Clone or download」からスクリプトをダウンロード・解凍
 1. 外部サイトからChromeDriverをダウンロード
-1. ギフトIDをクリップボードにコピー（半角スペース区切りで複数入力可能）
+1. ギフトIDをクリップボードにコピー（改行区切りで複数入力可能）
 1. start.batを実行
 
 ### Linux
@@ -25,7 +25,7 @@ unzip chromedriver_linux64.zip
 mv chromedriver NanacoGiftHelpers
 
 cd NanacoGiftHelpers
-python3 nanaco.py ${nanaco番号} ${パスワード} ${ギフトID} ${ギフトID}...
+python3 nanaco.py -d ${ChromeDriverのパス} ${nanaco番号} ${パスワード} ${ギフトID} ${ギフトID}...
 ```
 
 ## 使用言語

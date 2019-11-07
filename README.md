@@ -4,7 +4,7 @@ nanacoギフト関連のスクリプト集です。
 
 ## 説明
 
-NanacoGiftHelpersは、nanaco（モバイル・ネット会員）でのギフトの自動登録を行うスクリプトです。
+NanacoGiftHelpersは、nanacoギフトの自動登録を行うスクリプトです。
 
 ## 使い方
 
@@ -25,13 +25,13 @@ unzip chromedriver_linux64.zip
 mv chromedriver NanacoGiftHelpers
 
 cd NanacoGiftHelpers
-python3 nanaco.py -d ${ChromeDriverのパス} ${nanaco番号} ${パスワード} ${ギフトID} ${ギフトID}...
+python3 nanaco.py -d ${ChromeDriverのパス} ${card または mobile} ${nanaco番号} ${パスワード} ${ギフトID} ${ギフトID}...
 ```
 
 ## 使用言語
 
 - Windows PowerShell 5.1(Desktop)
-- Python 3.7
+- Python 3.8
 
 ## 開発環境
 

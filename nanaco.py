@@ -5,6 +5,7 @@ from selenium.common.exceptions import NoSuchElementException
 import time
 import argparse
 import os
+from enum import Enum, auto
 
 
 def file_path(path):
@@ -14,11 +15,25 @@ def file_path(path):
     raise argparse.ArgumentTypeError(f'{path} does not exist.')
 
 
+class NanacoType(Enum):
+    Card = auto()
+    Mobile = auto()
+
+    @staticmethod
+    def parse(nanaco_type_str):
+        s = nanaco_type_str.capitalize()
+        if s in NanacoType.__members__:
+            return NanacoType[s]
+
+        raise argparse.ArgumentTypeError(f'{nanaco_type_str} is not NanacoType')
+
+
 driver_path = 'chromedriver' + '.exe' if os.name == 'nt' else ''
 
 parser = argparse.ArgumentParser()
 
 parser.add_argument('-d', '--driver', default=driver_path, type=file_path, help='ChromeDriverのパス')
+parser.add_argument('type', type=NanacoType.parse, help='card または mobile')
 parser.add_argument('number', type=int, help='nanaco番号')
 parser.add_argument('password', help='パスワード')
 parser.add_argument('gifts', nargs='+', help='ギフトID')
@@ -33,14 +48,25 @@ with webdriver.Chrome(args.driver) as driver:
     # nanacoログインページに移動
     driver.get('https://www.nanaco-net.jp/pc/emServlet')
 
-    # nanaco番号入力
-    driver.find_elements_by_name('XCID')[1].send_keys(args.number)
+    # カードまたはモバイル
+    if args.type == NanacoType.Card:
+        # 「nanaco番号」入力
+        driver.find_elements_by_name('XCID')[0].send_keys(args.number)
 
-    # パスワード入力
-    driver.find_element_by_name('LOGIN_PWD').send_keys(args.password)
+        # 「カード記載の番号」入力
+        driver.find_element_by_name('SECURITY_CD').send_keys(args.password)
 
-    # ログインボタンをクリック
-    driver.find_element_by_name('ACT_ACBS_do_LOGIN1').click()
+        # ログインボタンをクリック
+        driver.find_element_by_name('ACT_ACBS_do_LOGIN2').click()
+    else:
+        # 「nanaco番号」入力
+        driver.find_elements_by_name('XCID')[1].send_keys(args.number)
+
+        # 「会員メニュー用パスワード」入力
+        driver.find_element_by_name('LOGIN_PWD').send_keys(args.password)
+
+        # ログインボタンをクリック
+        driver.find_element_by_name('ACT_ACBS_do_LOGIN1').click()
 
     # ギフトID登録画面に移動
     driver.find_element_by_css_selector('#gift > a').click()

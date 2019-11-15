@@ -14,22 +14,29 @@ if "%gifts%" == "" (
 echo ギフトID
 echo %gifts%
 
-rem nanaco番号入力
+rem nanacoカードまたはモバイル
 if "%1" == "" (
+    set /p type="card または mobile: "
+) else (
+    set type=%1
+)
+
+rem nanaco番号入力
+if "%2" == "" (
     for /f "usebackq" %%i in (`powershell -ExecutionPolicy Bypass -File ReadHost.ps1 nanaco番号`) do set number=%%i
 ) else (
-    set number=%1
+    set number=%2
 )
 
 rem パスワード入力
-if "%2" == "" (
+if "%3" == "" (
     for /f "usebackq" %%i in (`powershell -ExecutionPolicy Bypass -File ReadHost.ps1 パスワード`) do set password=%%i
 ) else (
-    set password=%2
+    set password=%3
 )
 
 rem Pythonを利用して、ギフトIDの自動入力処理を実行する。
-python nanaco.py %number% %password% %gifts%
+python nanaco.py %type% %number% %password% %gifts%
 
 :END
 cmd /k
